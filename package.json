@@ -3,15 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@hookform/resolvers": "^2.8.5",
     "@tailwindcss/postcss7-compat": "^2.2.17",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@windmill/react-ui": "^0.6.0",
     "add": "^2.0.6",
+    "axios": "^0.24.0",
+    "jwt-decode": "^3.1.2",
     "postcss": "^7.0.39",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.22.5",
     "react-redux": "^7.2.6",
     "react-router-dom": "5.2.0",
     "react-scripts": "5.0.0",
@@ -20,7 +24,8 @@
     "redux-thunk": "^2.4.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "web-vitals": "^2.1.0",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.17",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
