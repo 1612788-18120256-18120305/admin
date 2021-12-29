@@ -1,14 +1,14 @@
 import React, { useContext, Suspense, useEffect, lazy } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-//import routes from '../routes';
+import routes from '../routes';
 
-//import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/Sidebar';
 import Header from '../components/Header/Header';
 import Main from './Main';
-//import ThemedSuspense from '../components/ThemedSuspense';
-//import { SidebarContext } from '../context/SidebarContext';
+import ThemedSuspense from '../components/ThemedSuspense';
+import { SidebarContext } from '../context/SidebarContext';
 
-//const Page404 = lazy(() => import('../pages/404'));
+const Page404 = lazy(() => import('../pages/404'));
 
 function Layout() {
   //const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
@@ -23,11 +23,11 @@ function Layout() {
     //   isSidebarOpen && 'overflow-hidden'
     // }`}
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      {/* <Sidebar /> */}
+      <Sidebar />
 
       <div className="flex flex-col flex-1 w-full">
         <Header />
-        {/* <Main>
+        <Main>
           <Suspense fallback={<ThemedSuspense />}>
             <Switch>
               {routes.map((route, i) => {
@@ -35,7 +35,7 @@ function Layout() {
                   <Route
                     key={i}
                     exact={true}
-                    path={`/app${route.path}`}
+                    path={`/${route.path}`}
                     render={(props) => <route.component {...props} />}
                   />
                 ) : null;
@@ -44,7 +44,7 @@ function Layout() {
               <Route component={Page404} />
             </Switch>
           </Suspense>
-        </Main> */}
+        </Main>
       </div>
     </div>
   );
