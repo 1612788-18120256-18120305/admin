@@ -18,8 +18,10 @@ import {
   DropdownItem,
   WindmillContext,
 } from '@windmill/react-ui';
+import { signOut } from '../../actions';
+import { connect } from 'react-redux';
 
-function Header() {
+function Header(props) {
   const { mode, toggleMode } = useContext(WindmillContext);
   //const { toggleSidebar } = useContext(SidebarContext);
 
@@ -32,6 +34,10 @@ function Header() {
 
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
+  }
+
+  function handleSignOut() {
+    props.signOut();
   }
 
   return (
@@ -138,7 +144,7 @@ function Header() {
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Settings</span>
               </DropdownItem>
-              <DropdownItem onClick={() => alert('Log out!')}>
+              <DropdownItem onClick={handleSignOut}>
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"
@@ -153,4 +159,5 @@ function Header() {
   );
 }
 
-export default Header;
+const mapStateToProps = (state) => ({});
+export default connect(mapStateToProps, { signOut })(Header);

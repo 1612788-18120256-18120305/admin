@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import config from '../config/mainConfig';
 import ImageLight from '../assets/img/login-office.jpeg';
 import ImageDark from '../assets/img/login-office-dark.jpeg';
-import { GithubIcon, TwitterIcon } from '../icons';
+import axios from 'axios';
+// import { GithubIcon, TwitterIcon } from '../icons';
 import { Label, Input, Button, HelperText } from '@windmill/react-ui';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { signIn } from '../actions';
+import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const schema = yup
   .object()
@@ -17,7 +21,7 @@ const schema = yup
   })
   .required();
 
-function Login() {
+function Login(props) {
   const {
     control,
     handleSubmit,
@@ -26,9 +30,8 @@ function Login() {
     resolver: yupResolver(schema),
   });
 
-  function onSubmit(data) {
-    console.log('submit');
-    console.log(data);
+  async function onSubmit(data) {
+    props.signIn(data);
   }
 
   return (
@@ -127,8 +130,14 @@ function Login() {
           </main>
         </div>
       </div>
+      <ToastContainer autoClose={3000} />
     </div>
   );
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+export default connect(mapStateToProps, { signIn })(Login);

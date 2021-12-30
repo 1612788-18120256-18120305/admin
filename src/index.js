@@ -6,12 +6,15 @@ import ThemedSuspense from './components/ThemedSuspense';
 import store from './myStore';
 import './index.css';
 import App from './App';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <Provider store={store}>
     <Suspense fallback={<ThemedSuspense />}>
       <Windmill>
         <App />
+        <ToastContainer autoClose={3000} />
       </Windmill>
     </Suspense>
   </Provider>,
