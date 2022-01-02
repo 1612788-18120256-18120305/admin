@@ -3,19 +3,11 @@ import { lazy } from 'react';
 // use lazy for better code splitting, a.k.a. load faster
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const AdminPage = lazy(() => import('../pages/AdminPage'));
+const CreateAdmin = lazy(() => import('../pages/CreateAdmin'));
+const AdminDetail = lazy(() => import('../pages/AdminDetail'));
 const UsersPage = lazy(() => import('../pages/UsersPage'));
 const ClassPage = lazy(() => import('../pages/ClassPage'));
 
-/**
- * ⚠ These are internal routes!
- * They will be rendered inside the app, using the default `containers/Layout`.
- * If you want to add a route to, let's say, a landing page, you should add
- * it to the `App`'s router, exactly like `Login`, `CreateAccount` and other pages
- * are routed.
- *
- * If you're looking for the links rendered in the SidebarContent, go to
- * `routes/sidebar.js`
- */
 const routes = [
   {
     path: 'dashboard', // the url
@@ -24,6 +16,14 @@ const routes = [
   {
     path: 'admins', // the url
     component: AdminPage, // view rendered
+  },
+  {
+    path: 'admins/create', // the url
+    component: CreateAdmin,
+  },
+  {
+    path: 'admins/:id', // the url
+    component: AdminDetail, // view rendered
   },
   {
     path: 'users', // the url

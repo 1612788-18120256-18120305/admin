@@ -10,11 +10,9 @@ const axiosJWT = axios.create({
 
 axiosJWT.interceptors.request.use(
   (config) => {
-    config.headers['Authorization'] = `Bearer ${
-      store.getState().auth.access_token
-    }`;
+    config.headers['Authorization'] = `Bearer ${store.getState().auth.jwt}`;
     let currentDate = new Date();
-    const decodeToken = jwtDecode(store.getState().auth.accessToken);
+    const decodeToken = jwtDecode(store.getState().auth.jwt);
     if (decodeToken.exp < currentDate.getTime() / 1000) {
       store.dispatch({
         type: SIGN_OUT,

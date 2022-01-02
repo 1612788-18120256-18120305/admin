@@ -2,7 +2,7 @@ import { SIGN_IN, SIGN_OUT, REFRESH_TOKEN } from '../actions/types';
 
 const INITIAL_STATE = {
   isSignedIn: false,
-  access_token: null,
+  jwt: null,
   refresh_token: null,
 };
 
@@ -10,16 +10,23 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SIGN_IN:
-      return { ...state, isSignedIn: true, ...action.payload };
+      return {
+        ...state,
+        isSignedIn: true,
+        jwt: action.payload.jwt,
+        refresh_token: action.payload.refresh_token,
+        user: action.payload.user,
+      };
     case SIGN_OUT:
       return {
         ...state,
-        access_token: null,
+        jwt: null,
         refresh_token: null,
         isSignedIn: false,
+        user: null,
       };
     case REFRESH_TOKEN:
-      return { ...state, access_token: action.payload };
+      return { ...state, jwt: action.payload };
     default:
       return state;
   }
