@@ -4,23 +4,15 @@ import { Link } from 'react-router-dom';
 import { Input, HelperText, Label, Button } from '@windmill/react-ui';
 import DefaultAvatar from '../assets/img/unnamed.png';
 import { connect } from 'react-redux';
-import { fetchAdmin } from '../actions';
+import { fetchAdmin, editAdmin } from '../actions';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const schema = yup
   .object({
-    email: yup.string().email().required('Email is required'),
     name: yup.string().min(2).max(50).required('Fullname is required'),
     phoneNumber: yup.string().max(24).required('Phone number is required'),
-    password: yup.string().min(8).max(16).required('Password is required'),
-    confirmPassword: yup
-      .string()
-      .min(8)
-      .max(16)
-      .required('Conform password is required')
-      .oneOf([yup.ref('password')], 'Password must match'),
   })
   .required();
 
@@ -38,7 +30,7 @@ function AdminDetail(props) {
   }, []);
 
   function onSubmit(data) {
-    console.log(data);
+    props.editAdmin(props.auth.user._id, data);
   }
 
   if (!props.admin) {
@@ -86,7 +78,7 @@ function AdminDetail(props) {
                 <span>Email</span>
                 <Input
                   {...register('email')}
-                  disabled={!isMyProfile}
+                  disabled
                   defaultValue={admin.email}
                   className="mt-1"
                   placeholder="Email"
@@ -112,11 +104,13 @@ function AdminDetail(props) {
                 </HelperText>
               </Label>
 
-              {/* <div className="flex justify-center">
-                <Button className="my-6" type="submit">
-                  Update
-                </Button>
-              </div> */}
+              {isMyProfile && (
+                <div className="flex justify-center">
+                  <Button className="my-6" type="submit">
+                    Update
+                  </Button>
+                </div>
+              )}
             </form>
           </div>
         </div>
@@ -128,9 +122,10 @@ function AdminDetail(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     admin: state.admins[ownProps.match.params.id],
+    auth: state.auth,
     isMyProfile:
       ownProps.match.params.id.toString() === state.auth.user._id.toString(),
   };
 };
 
-export default connect(mapStateToProps, { fetchAdmin })(AdminDetail);
+export default connect(mapStateToProps, { fetchAdmin, editAdmin })(AdminDetail);

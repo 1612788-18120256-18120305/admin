@@ -84,6 +84,19 @@ export const createAdmin = (formValues) => async (dispatch) => {
   }
 };
 
-// export const editAdmin = (formValues) => async (dispatch) => {
-//   const res = await axiosJWT.put('/users/admins/edit/')
-// }
+// edit admin profile
+export const editAdmin = (id, data) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.put(`/users/${id}`, data);
+    console.log(res);
+    if (res.data.success) {
+      dispatch({
+        type: EDIT_ADMIN,
+        payload: res.data.user,
+      });
+      toast.success('Updated!');
+    }
+  } catch (err) {
+    toast.success(err.response.data.message);
+  }
+};
