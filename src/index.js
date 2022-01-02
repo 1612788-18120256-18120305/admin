@@ -8,6 +8,7 @@ import './index.css';
 import App from './App';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'tw-elements';
 
 ReactDOM.render(
   <Provider store={store}>

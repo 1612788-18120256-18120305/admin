@@ -10,7 +10,7 @@ function Modals({ header, isOpenModal, setClose, children, actions }) {
 
   return (
     <Modal isOpen={isOpenModal} onClose={closeModal}>
-      <ModalHeader>{header}</ModalHeader>
+      <ModalHeader className="text-red-600">{header}</ModalHeader>
       <ModalBody>{children}</ModalBody>
       <ModalFooter>{actions}</ModalFooter>
     </Modal>

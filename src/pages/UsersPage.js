@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PageTitle from '../components/Typography/PageTitle';
 import Modals from '../components/Modals/Modals';
-import { fetchAdmins } from '../actions';
+import { fetchUsers, banUser, unLockUser } from '../actions';
 import { Link } from 'react-router-dom';
 //import SectionTitle from '../components/Typography/SectionTitle';
 import {
@@ -19,21 +19,28 @@ import {
   Pagination,
 } from '@windmill/react-ui';
 import DefaultAvatar from '../assets/img/unnamed.png';
-import { EditIcon, TrashIcon } from '../icons';
+import { EditIcon, LockIcon, UnLockIcon } from '../icons';
 
 function UsersPage(props) {
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isOpenModal, setOpenModal] = useState(false);
+  const [isOpenUnlockModal, setOpenUnlockModal] = useState(false);
   const [pageTable, setPageTable] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    props.fetchAdmins();
+    props.fetchUsers();
   }, []);
+
+  if (!props.users) {
+    return <div>Loading...</div>;
+  }
 
   // pagination setup
   const resultsPerPage = 10;
-  const totalResults = props.admins.length;
+  const totalResults = props.users.length;
 
-  let dataTable = props.admins.slice(
+  let dataTable = props.users.slice(
     (pageTable - 1) * resultsPerPage,
     pageTable * resultsPerPage
   );
@@ -47,6 +54,32 @@ function UsersPage(props) {
     setOpenModal(false);
   }
 
+  function handleShowModal(user) {
+    setSelectedUser(user);
+    setOpenModal(true);
+  }
+
+  function handleShowUnLockModal(user) {
+    setSelectedUser(user);
+    setOpenUnlockModal(true);
+  }
+
+  function handleCloseUnLockModal() {
+    setOpenUnlockModal(false);
+  }
+
+  function handleBanUser() {
+    setIsLoading(true);
+    props.banUser(selectedUser._id, setIsLoading);
+    setOpenModal(false);
+  }
+
+  function handleUnLockUser() {
+    setIsLoading(true);
+    props.unLockUser(selectedUser._id, setIsLoading);
+    setOpenUnlockModal(false);
+  }
+
   const modalActions = (
     <>
       <div className="hidden sm:block">
@@ -55,7 +88,7 @@ function UsersPage(props) {
         </Button>
       </div>
       <div className="hidden sm:block">
-        <Button>Accept</Button>
+        <Button onClick={handleBanUser}>Accept</Button>
       </div>
       <div className="block w-full sm:hidden">
         <Button block size="large" layout="outline" onClick={handleCloseModal}>
@@ -63,7 +96,35 @@ function UsersPage(props) {
         </Button>
       </div>
       <div className="block w-full sm:hidden">
-        <Button block size="large">
+        <Button onClick={handleBanUser} block size="large">
+          Accept
+        </Button>
+      </div>
+    </>
+  );
+
+  const modalUnlockActions = (
+    <>
+      <div className="hidden sm:block">
+        <Button layout="outline" onClick={handleCloseUnLockModal}>
+          Cancel
+        </Button>
+      </div>
+      <div className="hidden sm:block">
+        <Button onClick={handleUnLockUser}>Accept</Button>
+      </div>
+      <div className="block w-full sm:hidden">
+        <Button
+          block
+          size="large"
+          layout="outline"
+          onClick={handleCloseUnLockModal}
+        >
+          Cancel
+        </Button>
+      </div>
+      <div className="block w-full sm:hidden">
+        <Button onClick={handleUnLockUser} block size="large">
           Accept
         </Button>
       </div>
@@ -74,7 +135,7 @@ function UsersPage(props) {
     <>
       <div className="flex justify-between">
         <PageTitle>Users</PageTitle>
-        <div className="px-6 my-6">
+        {/* <div className="px-6 my-6">
           <Link to="/admins/create">
             <Button>
               Create account
@@ -83,7 +144,7 @@ function UsersPage(props) {
               </span>
             </Button>
           </Link>
-        </div>
+        </div> */}
       </div>
       {/* <SectionTitle>Table with actions</SectionTitle> */}
       <TableContainer className="mb-8">
@@ -92,7 +153,7 @@ function UsersPage(props) {
             <tr>
               <TableCell>User</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Phone Number</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Date Created</TableCell>
               <TableCell>Actions</TableCell>
             </tr>
@@ -109,9 +170,7 @@ function UsersPage(props) {
                     />
                     <div>
                       <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        Super admin
-                      </p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400"></p>
                     </div>
                   </div>
                 </TableCell>
@@ -119,7 +178,20 @@ function UsersPage(props) {
                   <span className="text-sm">{user.email}</span>
                 </TableCell>
                 <TableCell>
-                  <Badge type={user.status}>{user.phoneNumber}</Badge>
+                  {isLoading && selectedUser._id === user._id ? (
+                    <div className="flex justify-center items-center">
+                      <div
+                        className="spinner-border animate-spin inline-block w-5 h-5 border-4 rounded-full text-blue-300"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <Badge type={user.status === 1 ? 'success' : 'danger'}>
+                      {user.status === 1 ? 'Active' : 'Banned'}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">
@@ -128,19 +200,36 @@ function UsersPage(props) {
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center items-center space-x-4">
-                    <Link to={`/admins/${user._id}`}>
+                    <Link to={`/users/${user._id}`}>
                       <Button layout="link" size="icon" aria-label="Edit">
                         <EditIcon className="w-5 h-5" aria-hidden="true" />
                       </Button>
                     </Link>
-                    {/* <Button
-                      layout="link"
-                      size="icon"
-                      aria-label="Delete"
-                      onClick={() => setOpenModal(true)}
-                    >
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                    </Button> */}
+                    {user.status === 0 ? (
+                      <Button
+                        layout="link"
+                        size="icon"
+                        aria-label="Delete"
+                        onClick={() => handleShowUnLockModal(user)}
+                      >
+                        <UnLockIcon
+                          className="w-5 h-5 text-red-800"
+                          aria-hidden="true"
+                        />
+                      </Button>
+                    ) : (
+                      <Button
+                        layout="link"
+                        size="icon"
+                        aria-label="Delete"
+                        onClick={() => handleShowModal(user)}
+                      >
+                        <LockIcon
+                          className="w-5 h-5 text-red-800"
+                          aria-hidden="true"
+                        />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -159,13 +248,18 @@ function UsersPage(props) {
       <Modals
         isOpenModal={isOpenModal}
         setClose={() => setOpenModal(false)}
-        header="Create admin"
+        header="Warning"
         actions={modalActions}
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis optio
-        voluptatum, deleniti assumenda, dolorum enim, at aspernatur ratione
-        blanditiis voluptas deserunt ex. Voluptate sit reiciendis beatae.
-        Praesentium repellendus culpa quia.
+        {selectedUser && `Do you want to ban ${selectedUser.name} ?`}
+      </Modals>
+      <Modals
+        isOpenModal={isOpenUnlockModal}
+        setClose={() => setOpenUnlockModal(false)}
+        header="Warning"
+        actions={modalUnlockActions}
+      >
+        {selectedUser && `Do you want to unlock ${selectedUser.name} ?`}
       </Modals>
     </>
   );
@@ -173,8 +267,10 @@ function UsersPage(props) {
 
 const mapStateToProps = (state) => {
   return {
-    admins: Object.values(state.admins),
+    users: Object.values(state.users),
   };
 };
 
-export default connect(mapStateToProps, { fetchAdmins })(UsersPage);
+export default connect(mapStateToProps, { fetchUsers, banUser, unLockUser })(
+  UsersPage
+);

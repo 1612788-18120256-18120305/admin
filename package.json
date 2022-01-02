@@ -24,6 +24,7 @@
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "tw-elements": "^1.0.0-alpha3",
     "web-vitals": "^2.1.0",
     "yarn": "^1.22.17",
     "yup": "^0.32.11"

@@ -7,6 +7,7 @@ const CreateAdmin = lazy(() => import('../pages/CreateAdmin'));
 const AdminDetail = lazy(() => import('../pages/AdminDetail'));
 const UsersPage = lazy(() => import('../pages/UsersPage'));
 const ClassPage = lazy(() => import('../pages/ClassPage'));
+const UserDetail = lazy(() => import('../pages/UserDetail'));
 
 const routes = [
   {
@@ -28,6 +29,10 @@ const routes = [
   {
     path: 'users', // the url
     component: UsersPage, // view rendered
+  },
+  {
+    path: 'users/:id',
+    component: UserDetail,
   },
   {
     path: 'classes', // the url

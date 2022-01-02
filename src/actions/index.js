@@ -11,6 +11,10 @@ import {
   CREATE_ADMIN,
   DELETE_ADMIN,
   EDIT_ADMIN,
+  FETCH_USERS,
+  FETCH_USER,
+  BAN_USER,
+  UNLOCK_USER,
 } from './types';
 
 export const signIn = (formValues) => async (dispatch) => {
@@ -99,4 +103,58 @@ export const editAdmin = (id, data) => async (dispatch) => {
   } catch (err) {
     toast.success(err.response.data.message);
   }
+};
+
+export const fetchUsers = () => async (dispatch) => {
+  try {
+    const res = await axiosJWT.get('/users');
+    if (res.data.success) {
+      dispatch({
+        type: FETCH_USERS,
+        payload: res.data.users,
+      });
+    }
+  } catch (err) {
+    toast.success(err.response.data.message);
+  }
+};
+
+export const fetchUser = (id) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.get(`/users/${id}`);
+    if (res.data.success) {
+      dispatch({
+        type: FETCH_USER,
+        payload: res.data.user,
+      });
+    }
+  } catch (err) {}
+};
+
+export const banUser = (id, setLoading) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.post(`/users/ban`, { id });
+    if (res.data.success) {
+      dispatch({
+        type: BAN_USER,
+        payload: res.data.user,
+      });
+      setLoading(false);
+      toast.success('Banned!');
+    }
+  } catch (err) {}
+};
+
+export const unLockUser = (id, setLoading) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.post(`/users/unlock`, { id });
+    if (res.data.success) {
+      dispatch({
+        type: UNLOCK_USER,
+        payload: res.data.user,
+      });
+      setLoading(false);
+      toast.success('Unlocked!');
+    }
+  } catch (err) {}
 };

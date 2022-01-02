@@ -11,3 +11,4 @@ export const DELETE_ADMIN = 'DELETE_ADMIN';
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USER = 'FETCH_USER';
 export const BAN_USER = 'BAN_USER';
+export const UNLOCK_USER = 'UNLOCK_USER';
