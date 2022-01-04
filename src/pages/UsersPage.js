@@ -154,6 +154,7 @@ function UsersPage(props) {
               <TableCell>User</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>StudentId</TableCell>
               <TableCell>Date Created</TableCell>
               <TableCell>Actions</TableCell>
             </tr>
@@ -192,6 +193,9 @@ function UsersPage(props) {
                       {user.status === 1 ? 'Active' : 'Banned'}
                     </Badge>
                   )}
+                </TableCell>
+                <TableCell>
+                  <span className="text-sm">{user.student}</span>
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">

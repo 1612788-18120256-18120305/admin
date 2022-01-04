@@ -3,6 +3,8 @@ import {
   FETCH_USER,
   BAN_USER,
   UNLOCK_USER,
+  MAP_STUDENTID,
+  UNMAP_STUDENTID,
 } from '../actions/types.js';
 import _ from 'lodash';
 
@@ -16,6 +18,10 @@ export default (state = [], action) => {
     case BAN_USER:
       return { ...state, [action.payload._id]: action.payload };
     case UNLOCK_USER:
+      return { ...state, [action.payload._id]: action.payload };
+    case MAP_STUDENTID:
+      return { ...state, [action.payload._id]: action.payload };
+    case UNMAP_STUDENTID:
       return { ...state, [action.payload._id]: action.payload };
     default:
       return state;

@@ -17,6 +17,8 @@ import {
   UNLOCK_USER,
   FETCH_CLASSES,
   FETCH_CLASS,
+  MAP_STUDENTID,
+  UNMAP_STUDENTID,
 } from './types';
 
 export const signIn = (formValues) => async (dispatch) => {
@@ -181,6 +183,39 @@ export const fetchClass = (id) => async (dispatch) => {
         type: FETCH_CLASS,
         payload: res.data.course,
       });
+    }
+  } catch (err) {}
+};
+
+export const mapStudentId = (userId, studentId) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.patch('/users/map', {
+      id: userId,
+      student: studentId,
+    });
+    if (res.data.success) {
+      dispatch({
+        type: MAP_STUDENTID,
+        payload: res.data.user,
+      });
+      toast.success('Mapped!');
+    }
+  } catch (err) {
+    toast.error(err.response.data.message);
+  }
+};
+
+export const unMapStudentId = (userId) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.patch('/users/unmap', {
+      id: userId,
+    });
+    if (res.data.success) {
+      dispatch({
+        type: UNMAP_STUDENTID,
+        payload: res.data.user,
+      });
+      toast.success('Unmapped!');
     }
   } catch (err) {}
 };
