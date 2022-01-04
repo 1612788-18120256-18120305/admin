@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 //import { SidebarContext } from '../context/SidebarContext';
+import { Link } from 'react-router-dom';
 import {
   SearchIcon,
   MoonIcon,
@@ -100,11 +101,11 @@ function Header(props) {
               isOpen={isNotificationsMenuOpen}
               onClose={() => setIsNotificationsMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#" className="justify-between">
+              <DropdownItem className="justify-between">
                 <span>Messages</span>
                 <Badge type="danger">13</Badge>
               </DropdownItem>
-              <DropdownItem tag="a" href="#" className="justify-between">
+              <DropdownItem className="justify-between">
                 <span>Sales</span>
                 <Badge type="danger">2</Badge>
               </DropdownItem>
@@ -133,14 +134,16 @@ function Header(props) {
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#">
+              <DropdownItem>
                 <OutlinePersonIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"
                 />
-                <span>Profile</span>
+                <Link to={`/admins/${props.user._id}`}>
+                  <span>Profile</span>
+                </Link>
               </DropdownItem>
-              <DropdownItem tag="a" href="#">
+              <DropdownItem>
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Settings</span>
               </DropdownItem>
@@ -159,5 +162,7 @@ function Header(props) {
   );
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
 export default connect(mapStateToProps, { signOut })(Header);

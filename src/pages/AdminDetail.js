@@ -83,7 +83,6 @@ function AdminDetail(props) {
                   className="mt-1"
                   placeholder="Email"
                   type="email"
-                  valid={errors.email === undefined}
                 />
                 <HelperText valid={false}>{errors.email?.message}</HelperText>
               </Label>

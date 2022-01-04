@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/classes',
-    icon: 'PeopleIcon',
+    icon: 'ClassIcon',
     name: 'Classes',
   },
 ];

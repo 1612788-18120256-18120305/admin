@@ -8,6 +8,7 @@ const AdminDetail = lazy(() => import('../pages/AdminDetail'));
 const UsersPage = lazy(() => import('../pages/UsersPage'));
 const ClassPage = lazy(() => import('../pages/ClassPage'));
 const UserDetail = lazy(() => import('../pages/UserDetail'));
+const ClassDetail = lazy(() => import('../pages/ClassDetail'));
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: 'classes', // the url
     component: ClassPage, // view rendered
+  },
+  {
+    path: 'classes/:id',
+    component: ClassDetail,
   },
 ];
 

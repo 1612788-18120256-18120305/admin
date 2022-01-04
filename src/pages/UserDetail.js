@@ -46,6 +46,7 @@ function UserDetail(props) {
                   placeholder="Fullname"
                   defaultValue={user.name}
                   disabled
+                  valid
                 />
               </Label>
 
@@ -57,6 +58,7 @@ function UserDetail(props) {
                   className="mt-1"
                   placeholder="Email"
                   type="email"
+                  valid
                 />
               </Label>
 
@@ -68,6 +70,7 @@ function UserDetail(props) {
                   placeholder="Phone Number"
                   type="number"
                   defaultValue={user.phoneNumber}
+                  valid
                 />
               </Label>
             </form>

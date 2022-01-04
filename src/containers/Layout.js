@@ -1,13 +1,11 @@
 import React, { useContext, Suspense, useEffect, lazy } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import routes from '../routes';
-
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header/Header';
 import Main from './Main';
 import ThemedSuspense from '../components/ThemedSuspense';
-import { SidebarContext } from '../context/SidebarContext';
-
+//import { SidebarContext } from '../context/SidebarContext';
 const Page404 = lazy(() => import('../pages/404'));
 
 function Layout() {

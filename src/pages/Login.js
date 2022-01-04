@@ -4,6 +4,7 @@ import ImageLight from '../assets/img/login-office.jpeg';
 import ImageDark from '../assets/img/login-office-dark.jpeg';
 import axios from 'axios';
 // import { GithubIcon, TwitterIcon } from '../icons';
+import { Redirect } from 'react-router-dom';
 import { Label, Input, Button, HelperText } from '@windmill/react-ui';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -29,6 +30,10 @@ function Login(props) {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  if (props.auth.isSignedIn) {
+    return <Redirect to="/" />;
+  }
 
   async function onSubmit(data) {
     props.signIn(data);

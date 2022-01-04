@@ -28,6 +28,7 @@ import { ReactComponent as OutlineCogIcon } from './outlineCog.svg';
 import { ReactComponent as OutlineLogoutIcon } from './outlineLogout.svg';
 import { ReactComponent as LockIcon } from './lock.svg';
 import { ReactComponent as UnLockIcon } from './unlock.svg';
+import { ReactComponent as ClassIcon } from './class.svg';
 
 export {
   ButtonsIcon,
@@ -60,4 +61,5 @@ export {
   OutlineLogoutIcon,
   LockIcon,
   UnLockIcon,
+  ClassIcon,
 };

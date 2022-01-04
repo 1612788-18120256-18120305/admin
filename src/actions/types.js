@@ -12,3 +12,6 @@ export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USER = 'FETCH_USER';
 export const BAN_USER = 'BAN_USER';
 export const UNLOCK_USER = 'UNLOCK_USER';
+
+export const FETCH_CLASSES = 'FETCH_CLASSES';
+export const FETCH_CLASS = 'FETCH_CLASS';

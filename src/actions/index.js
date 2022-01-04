@@ -15,6 +15,8 @@ import {
   FETCH_USER,
   BAN_USER,
   UNLOCK_USER,
+  FETCH_CLASSES,
+  FETCH_CLASS,
 } from './types';
 
 export const signIn = (formValues) => async (dispatch) => {
@@ -155,6 +157,30 @@ export const unLockUser = (id, setLoading) => async (dispatch) => {
       });
       setLoading(false);
       toast.success('Unlocked!');
+    }
+  } catch (err) {}
+};
+
+export const fetchClasses = () => async (dispatch) => {
+  try {
+    const res = await axiosJWT.get('/courses/all');
+    if (res.data.success) {
+      dispatch({
+        type: FETCH_CLASSES,
+        payload: res.data.courses,
+      });
+    }
+  } catch (err) {}
+};
+
+export const fetchClass = (id) => async (dispatch) => {
+  try {
+    const res = await axiosJWT.get(`/courses/all/${id}`);
+    if (res.data.success) {
+      dispatch({
+        type: FETCH_CLASS,
+        payload: res.data.course,
+      });
     }
   } catch (err) {}
 };

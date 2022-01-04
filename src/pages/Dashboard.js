@@ -1,7 +1,8 @@
 import React from 'react';
+import PageTitle from '../components/Typography/PageTitle';
 
 function Dashboard() {
-  return <div>DashBoard</div>;
+  return <PageTitle>Dashboard</PageTitle>;
 }
 
 export default Dashboard;
