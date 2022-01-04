@@ -4,7 +4,8 @@ import PageTitle from '../components/Typography/PageTitle';
 import Modals from '../components/Modals/Modals';
 import { fetchUsers, banUser, unLockUser } from '../actions';
 import { Link } from 'react-router-dom';
-//import SectionTitle from '../components/Typography/SectionTitle';
+import { Input } from '@windmill/react-ui';
+
 import {
   Table,
   TableHeader,
@@ -19,7 +20,7 @@ import {
   Pagination,
 } from '@windmill/react-ui';
 import DefaultAvatar from '../assets/img/unnamed.png';
-import { EditIcon, LockIcon, UnLockIcon } from '../icons';
+import { EditIcon, LockIcon, UnLockIcon, SortIcon } from '../icons';
 
 function UsersPage(props) {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -27,20 +28,39 @@ function UsersPage(props) {
   const [isOpenUnlockModal, setOpenUnlockModal] = useState(false);
   const [pageTable, setPageTable] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchName, setSearchName] = useState('');
+  const [searchEmail, setSearchEmail] = useState('');
+  const [isAsc, setIsAsc] = useState(true);
 
   useEffect(() => {
     props.fetchUsers();
-  }, []);
+  }, [props]);
 
   if (!props.users) {
     return <div>Loading...</div>;
   }
 
+  let dataTable = props.users;
+  dataTable = dataTable.filter((user) => {
+    return (
+      user.name?.toLowerCase().includes(searchName.toLowerCase()) &&
+      user.email?.toLowerCase().includes(searchEmail.toLowerCase())
+    );
+  });
+
+  dataTable = dataTable.sort((a, b) => {
+    if (isAsc) {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    } else {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+  });
+
   // pagination setup
   const resultsPerPage = 10;
   const totalResults = props.users.length;
 
-  let dataTable = props.users.slice(
+  dataTable = dataTable.slice(
     (pageTable - 1) * resultsPerPage,
     pageTable * resultsPerPage
   );
@@ -80,6 +100,9 @@ function UsersPage(props) {
     setOpenUnlockModal(false);
   }
 
+  function onSortChange() {
+    setIsAsc(!isAsc);
+  }
   const modalActions = (
     <>
       <div className="hidden sm:block">
@@ -135,18 +158,22 @@ function UsersPage(props) {
     <>
       <div className="flex justify-between">
         <PageTitle>Users</PageTitle>
-        {/* <div className="px-6 my-6">
-          <Link to="/admins/create">
-            <Button>
-              Create account
-              <span className="ml-2" aria-hidden="true">
-                +
-              </span>
-            </Button>
-          </Link>
-        </div> */}
       </div>
-      {/* <SectionTitle>Table with actions</SectionTitle> */}
+      <div className="flex mb-4">
+        <Input
+          className="mr-4"
+          aria-label="Bad"
+          placeholder="Name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
+        <Input
+          aria-label="Bad"
+          placeholder="Email"
+          value={searchEmail}
+          onChange={(e) => setSearchEmail(e.target.value)}
+        />
+      </div>
       <TableContainer className="mb-8">
         <Table>
           <TableHeader>
@@ -155,7 +182,14 @@ function UsersPage(props) {
               <TableCell>Email</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>StudentId</TableCell>
-              <TableCell>Date Created</TableCell>
+              <TableCell>
+                <div className="flex items-center">
+                  <span>Date Created</span>
+                  <button onClick={onSortChange}>
+                    <SortIcon className="ml-1" />
+                  </button>
+                </div>
+              </TableCell>
               <TableCell>Actions</TableCell>
             </tr>
           </TableHeader>

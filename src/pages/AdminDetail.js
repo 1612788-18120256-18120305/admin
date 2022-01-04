@@ -37,7 +37,9 @@ function AdminDetail(props) {
     return <div>Loading...</div>;
   }
 
-  const { admin, isMyProfile } = props;
+  const isMyProfile =
+    props.match.params.id.toString() === props.auth.user._id.toString();
+  const { admin } = props;
 
   return (
     <>
@@ -122,8 +124,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     admin: state.admins[ownProps.match.params.id],
     auth: state.auth,
-    isMyProfile:
-      ownProps.match.params.id.toString() === state.auth.user._id.toString(),
   };
 };
 

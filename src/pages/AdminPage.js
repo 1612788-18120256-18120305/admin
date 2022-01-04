@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PageTitle from '../components/Typography/PageTitle';
-import Modals from '../components/Modals/Modals';
 import { fetchAdmins } from '../actions';
 import { Link } from 'react-router-dom';
-//import SectionTitle from '../components/Typography/SectionTitle';
+import { Input } from '@windmill/react-ui';
+
 import {
   Table,
   TableHeader,
@@ -19,21 +19,39 @@ import {
   Pagination,
 } from '@windmill/react-ui';
 import DefaultAvatar from '../assets/img/unnamed.png';
-import { EditIcon, TrashIcon } from '../icons';
+import { EditIcon, SortIcon } from '../icons';
 
 function AdminPage(props) {
-  const [isOpenModal, setOpenModal] = useState(false);
   const [pageTable, setPageTable] = useState(1);
+  const [searchName, setSearchName] = useState('');
+  const [searchEmail, setSearchEmail] = useState('');
+  const [isAsc, setIsAsc] = useState(true);
 
   useEffect(() => {
     props.fetchAdmins();
-  }, []);
+  }, [props]);
+
+  let dataTable = props.admins;
+  dataTable = dataTable.filter((admin) => {
+    return (
+      admin.name.toLowerCase().includes(searchName.toLowerCase()) &&
+      admin.email.toLowerCase().includes(searchEmail.toLowerCase())
+    );
+  });
+
+  dataTable = dataTable.sort((a, b) => {
+    if (isAsc) {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    } else {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+  });
 
   // pagination setup
   const resultsPerPage = 10;
   const totalResults = props.admins.length;
 
-  let dataTable = props.admins.slice(
+  dataTable = dataTable.slice(
     (pageTable - 1) * resultsPerPage,
     pageTable * resultsPerPage
   );
@@ -43,38 +61,15 @@ function AdminPage(props) {
     setPageTable(p);
   }
 
-  function handleCloseModal() {
-    setOpenModal(false);
+  function onSortChange() {
+    setIsAsc(!isAsc);
   }
-
-  const modalActions = (
-    <>
-      <div className="hidden sm:block">
-        <Button layout="outline" onClick={handleCloseModal}>
-          Cancel
-        </Button>
-      </div>
-      <div className="hidden sm:block">
-        <Button>Accept</Button>
-      </div>
-      <div className="block w-full sm:hidden">
-        <Button block size="large" layout="outline" onClick={handleCloseModal}>
-          Cancel
-        </Button>
-      </div>
-      <div className="block w-full sm:hidden">
-        <Button block size="large">
-          Accept
-        </Button>
-      </div>
-    </>
-  );
 
   return (
     <>
       <div className="flex justify-between">
         <PageTitle>Admins</PageTitle>
-        <div className="px-6 my-6">
+        <div className="my-6">
           <Link to="/admins/create">
             <Button>
               Create account
@@ -85,6 +80,21 @@ function AdminPage(props) {
           </Link>
         </div>
       </div>
+      <div className="flex mb-4">
+        <Input
+          className="mr-4"
+          aria-label="Bad"
+          placeholder="Name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
+        <Input
+          aria-label="Bad"
+          placeholder="Email"
+          value={searchEmail}
+          onChange={(e) => setSearchEmail(e.target.value)}
+        />
+      </div>
       {/* <SectionTitle>Table with actions</SectionTitle> */}
       <TableContainer className="mb-8">
         <Table>
@@ -93,7 +103,14 @@ function AdminPage(props) {
               <TableCell>Admin</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Phone Number</TableCell>
-              <TableCell>Date Created</TableCell>
+              <TableCell>
+                <div className="flex items-center">
+                  <span>Date Created</span>
+                  <button onClick={onSortChange}>
+                    <SortIcon className="ml-1" />
+                  </button>
+                </div>
+              </TableCell>
               <TableCell>Actions</TableCell>
             </tr>
           </TableHeader>
@@ -133,14 +150,6 @@ function AdminPage(props) {
                         <EditIcon className="w-5 h-5" aria-hidden="true" />
                       </Button>
                     </Link>
-                    {/* <Button
-                      layout="link"
-                      size="icon"
-                      aria-label="Delete"
-                      onClick={() => setOpenModal(true)}
-                    >
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                    </Button> */}
                   </div>
                 </TableCell>
               </TableRow>
@@ -156,17 +165,6 @@ function AdminPage(props) {
           />
         </TableFooter>
       </TableContainer>
-      <Modals
-        isOpenModal={isOpenModal}
-        setClose={() => setOpenModal(false)}
-        header="Create admin"
-        actions={modalActions}
-      >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis optio
-        voluptatum, deleniti assumenda, dolorum enim, at aspernatur ratione
-        blanditiis voluptas deserunt ex. Voluptate sit reiciendis beatae.
-        Praesentium repellendus culpa quia.
-      </Modals>
     </>
   );
 }

@@ -13,26 +13,41 @@ import {
   TableFooter,
   TableContainer,
   Badge,
-  Avatar,
   Button,
   Pagination,
+  Input,
 } from '@windmill/react-ui';
-import DefaultAvatar from '../assets/img/unnamed.png';
-import { EditIcon, TrashIcon } from '../icons';
+import { EditIcon, SortIcon } from '../icons';
 
 function ClassPage(props) {
   const [pageTable, setPageTable] = useState(1);
+  const [searchName, setSearchName] = useState('');
+  const [isAsc, setIsAsc] = useState(true);
 
   useEffect(() => {
     props.fetchClasses();
   }, []);
 
   if (!props.classes.length === 0) return <div>Loading...</div>;
+
+  let dataTable = props.classes;
+  dataTable = dataTable.filter((cl) => {
+    return cl.name.toLowerCase().includes(searchName.toLowerCase());
+  });
+
+  dataTable = dataTable.sort((a, b) => {
+    if (isAsc) {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    } else {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+  });
+
   // pagination setup
   const resultsPerPage = 10;
   const totalResults = props.classes.length;
 
-  let dataTable = props.classes.slice(
+  dataTable = dataTable.slice(
     (pageTable - 1) * resultsPerPage,
     pageTable * resultsPerPage
   );
@@ -42,10 +57,24 @@ function ClassPage(props) {
     setPageTable(p);
   }
 
+  function onSortChange() {
+    setIsAsc(!isAsc);
+  }
+
   return (
     <>
       <div className="flex justify-between">
         <PageTitle>Classes</PageTitle>
+      </div>
+
+      <div className="mb-4">
+        <Input
+          className="mr-4"
+          aria-label="Bad"
+          placeholder="Name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
       </div>
 
       <TableContainer className="mb-8">
@@ -56,7 +85,14 @@ function ClassPage(props) {
               <TableCell>Description</TableCell>
               <TableCell>Owner</TableCell>
               <TableCell>Number of Students</TableCell>
-              <TableCell>Date Created</TableCell>
+              <TableCell>
+                <div className="flex items-center">
+                  <span>Date Created</span>
+                  <button onClick={onSortChange}>
+                    <SortIcon className="ml-1" />
+                  </button>
+                </div>
+              </TableCell>
               <TableCell>Actions</TableCell>
             </tr>
           </TableHeader>

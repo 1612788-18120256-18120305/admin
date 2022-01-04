@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageTitle from '../components/Typography/PageTitle';
-import { Input, HelperText, Label, Button } from '@windmill/react-ui';
+import { Input, Label, Button } from '@windmill/react-ui';
 import { connect } from 'react-redux';
 import { fetchClass } from '../actions';
 import ClassImage from '../assets/img/class.jpg';

@@ -134,15 +134,16 @@ function Header(props) {
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem>
-                <OutlinePersonIcon
-                  className="w-4 h-4 mr-3"
-                  aria-hidden="true"
-                />
-                <Link to={`/admins/${props.user._id}`}>
+              <Link to={`/admins/${props.user._id}`}>
+                <DropdownItem>
+                  <OutlinePersonIcon
+                    className="w-4 h-4 mr-3"
+                    aria-hidden="true"
+                  />
+
                   <span>Profile</span>
-                </Link>
-              </DropdownItem>
+                </DropdownItem>
+              </Link>
               <DropdownItem>
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Settings</span>
