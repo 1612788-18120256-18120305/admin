@@ -4,6 +4,7 @@ import PageTitle from '../components/Typography/PageTitle';
 import { fetchAdmins } from '../actions';
 import { Link } from 'react-router-dom';
 import { Input } from '@windmill/react-ui';
+import Spinner from '../components/Spinner/Spinner';
 
 import {
   Table,
@@ -96,75 +97,79 @@ function AdminPage(props) {
         />
       </div>
       {/* <SectionTitle>Table with actions</SectionTitle> */}
-      <TableContainer className="mb-8">
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Admin</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone Number</TableCell>
-              <TableCell>
-                <div className="flex items-center">
-                  <span>Date Created</span>
-                  <button onClick={onSortChange}>
-                    <SortIcon className="ml-1" />
-                  </button>
-                </div>
-              </TableCell>
-              <TableCell>Actions</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {dataTable.map((user, i) => (
-              <TableRow key={i}>
+      {props.admins.length === 0 ? (
+        <Spinner />
+      ) : (
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Admin</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Phone Number</TableCell>
                 <TableCell>
-                  <div className="flex items-center text-sm">
-                    <Avatar
-                      className="hidden mr-3 md:block"
-                      src={DefaultAvatar}
-                      alt="User avatar"
-                    />
-                    <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        Super admin
-                      </p>
+                  <div className="flex items-center">
+                    <span>Date Created</span>
+                    <button onClick={onSortChange}>
+                      <SortIcon className="ml-1" />
+                    </button>
+                  </div>
+                </TableCell>
+                <TableCell>Actions</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {dataTable.map((user, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="flex items-center text-sm">
+                      <Avatar
+                        className="hidden mr-3 md:block"
+                        src={DefaultAvatar}
+                        alt="User avatar"
+                      />
+                      <div>
+                        <p className="font-semibold">{user.name}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">
+                          Super admin
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{user.email}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge type={user.status}>{user.phoneNumber}</Badge>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-center items-center space-x-4">
-                    <Link to={`/admins/${user._id}`}>
-                      <Button layout="link" size="icon" aria-label="Edit">
-                        <EditIcon className="w-5 h-5" aria-hidden="true" />
-                      </Button>
-                    </Link>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            onChange={onPageChangeTable2}
-            label="Table navigation"
-          />
-        </TableFooter>
-      </TableContainer>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{user.email}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge type={user.status}>{user.phoneNumber}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-center items-center space-x-4">
+                      <Link to={`/admins/${user._id}`}>
+                        <Button layout="link" size="icon" aria-label="Edit">
+                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TableFooter>
+            <Pagination
+              totalResults={totalResults}
+              resultsPerPage={resultsPerPage}
+              onChange={onPageChangeTable2}
+              label="Table navigation"
+            />
+          </TableFooter>
+        </TableContainer>
+      )}
     </>
   );
 }

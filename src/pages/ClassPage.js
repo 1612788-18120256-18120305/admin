@@ -4,6 +4,7 @@ import PageTitle from '../components/Typography/PageTitle';
 import { fetchClasses } from '../actions';
 import { Link } from 'react-router-dom';
 //import SectionTitle from '../components/Typography/SectionTitle';
+import Spinner from '../components/Spinner/Spinner';
 import {
   Table,
   TableHeader,
@@ -77,78 +78,82 @@ function ClassPage(props) {
         />
       </div>
 
-      <TableContainer className="mb-8">
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Class</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Owner</TableCell>
-              <TableCell>Number of Students</TableCell>
-              <TableCell>
-                <div className="flex items-center">
-                  <span>Date Created</span>
-                  <button onClick={onSortChange}>
-                    <SortIcon className="ml-1" />
-                  </button>
-                </div>
-              </TableCell>
-              <TableCell>Actions</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {dataTable.map((c, i) => (
-              <TableRow key={i}>
+      {props.classes.length === 0 ? (
+        <Spinner />
+      ) : (
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Class</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Owner</TableCell>
+                <TableCell>Number of Students</TableCell>
                 <TableCell>
-                  <div className="flex items-center text-sm">
-                    {/* <Avatar
+                  <div className="flex items-center">
+                    <span>Date Created</span>
+                    <button onClick={onSortChange}>
+                      <SortIcon className="ml-1" />
+                    </button>
+                  </div>
+                </TableCell>
+                <TableCell>Actions</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {dataTable.map((c, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="flex items-center text-sm">
+                      {/* <Avatar
                       className="hidden mr-3 md:block"
                       src={DefaultAvatar}
                       alt="Class avatar"
                     /> */}
-                    <div>
-                      <p className="font-semibold">{c.name}</p>
+                      <div>
+                        <p className="font-semibold">{c.name}</p>
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{c.description}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge type={c.status}>{c.owner.name}</Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="text-center">
-                    <span>{c.students.length}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {new Date(c.createdAt).toLocaleDateString()}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-center items-center space-x-4">
-                    <Link to={`/classes/${c._id}`}>
-                      <Button layout="link" size="icon" aria-label="Edit">
-                        <EditIcon className="w-5 h-5" aria-hidden="true" />
-                      </Button>
-                    </Link>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            onChange={onPageChangeTable2}
-            label="Table navigation"
-          />
-        </TableFooter>
-      </TableContainer>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{c.description}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge type={c.status}>{c.owner.name}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-center">
+                      <span>{c.students.length}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(c.createdAt).toLocaleDateString()}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-center items-center space-x-4">
+                      <Link to={`/classes/${c._id}`}>
+                        <Button layout="link" size="icon" aria-label="Edit">
+                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TableFooter>
+            <Pagination
+              totalResults={totalResults}
+              resultsPerPage={resultsPerPage}
+              onChange={onPageChangeTable2}
+              label="Table navigation"
+            />
+          </TableFooter>
+        </TableContainer>
+      )}
     </>
   );
 }

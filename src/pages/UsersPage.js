@@ -21,6 +21,7 @@ import {
 } from '@windmill/react-ui';
 import DefaultAvatar from '../assets/img/unnamed.png';
 import { EditIcon, LockIcon, UnLockIcon, SortIcon } from '../icons';
+import Spinner from '../components/Spinner/Spinner';
 
 function UsersPage(props) {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -174,115 +175,119 @@ function UsersPage(props) {
           onChange={(e) => setSearchEmail(e.target.value)}
         />
       </div>
-      <TableContainer className="mb-8">
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>User</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>StudentId</TableCell>
-              <TableCell>
-                <div className="flex items-center">
-                  <span>Date Created</span>
-                  <button onClick={onSortChange}>
-                    <SortIcon className="ml-1" />
-                  </button>
-                </div>
-              </TableCell>
-              <TableCell>Actions</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {dataTable.map((user, i) => (
-              <TableRow key={i}>
+      {props.users.length === 0 ? (
+        <Spinner />
+      ) : (
+        <TableContainer className="mb-8">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>User</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>StudentId</TableCell>
                 <TableCell>
-                  <div className="flex items-center text-sm">
-                    <Avatar
-                      className="hidden mr-3 md:block"
-                      src={DefaultAvatar}
-                      alt="User avatar"
-                    />
-                    <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400"></p>
-                    </div>
+                  <div className="flex items-center">
+                    <span>Date Created</span>
+                    <button onClick={onSortChange}>
+                      <SortIcon className="ml-1" />
+                    </button>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <span className="text-sm">{user.email}</span>
-                </TableCell>
-                <TableCell>
-                  {isLoading && selectedUser._id === user._id ? (
-                    <div className="flex justify-center items-center">
-                      <div
-                        className="spinner-border animate-spin inline-block w-5 h-5 border-4 rounded-full text-blue-300"
-                        role="status"
-                      >
-                        <span className="visually-hidden">Loading...</span>
+                <TableCell>Actions</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {dataTable.map((user, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="flex items-center text-sm">
+                      <Avatar
+                        className="hidden mr-3 md:block"
+                        src={DefaultAvatar}
+                        alt="User avatar"
+                      />
+                      <div>
+                        <p className="font-semibold">{user.name}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400"></p>
                       </div>
                     </div>
-                  ) : (
-                    <Badge type={user.status === 1 ? 'success' : 'danger'}>
-                      {user.status === 1 ? 'Active' : 'Banned'}
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{user.student}</span>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-center items-center space-x-4">
-                    <Link to={`/users/${user._id}`}>
-                      <Button layout="link" size="icon" aria-label="Edit">
-                        <EditIcon className="w-5 h-5" aria-hidden="true" />
-                      </Button>
-                    </Link>
-                    {user.status === 0 ? (
-                      <Button
-                        layout="link"
-                        size="icon"
-                        aria-label="Delete"
-                        onClick={() => handleShowUnLockModal(user)}
-                      >
-                        <UnLockIcon
-                          className="w-5 h-5 text-red-800"
-                          aria-hidden="true"
-                        />
-                      </Button>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{user.email}</span>
+                  </TableCell>
+                  <TableCell>
+                    {isLoading && selectedUser._id === user._id ? (
+                      <div className="flex justify-center items-center">
+                        <div
+                          className="spinner-border animate-spin inline-block w-5 h-5 border-4 rounded-full text-blue-300"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
                     ) : (
-                      <Button
-                        layout="link"
-                        size="icon"
-                        aria-label="Delete"
-                        onClick={() => handleShowModal(user)}
-                      >
-                        <LockIcon
-                          className="w-5 h-5 text-red-800"
-                          aria-hidden="true"
-                        />
-                      </Button>
+                      <Badge type={user.status === 1 ? 'success' : 'danger'}>
+                        {user.status === 1 ? 'Active' : 'Banned'}
+                      </Badge>
                     )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            onChange={onPageChangeTable2}
-            label="Table navigation"
-          />
-        </TableFooter>
-      </TableContainer>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{user.student}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-center items-center space-x-4">
+                      <Link to={`/users/${user._id}`}>
+                        <Button layout="link" size="icon" aria-label="Edit">
+                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                      </Link>
+                      {user.status === 0 ? (
+                        <Button
+                          layout="link"
+                          size="icon"
+                          aria-label="Delete"
+                          onClick={() => handleShowUnLockModal(user)}
+                        >
+                          <UnLockIcon
+                            className="w-5 h-5 text-red-800"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      ) : (
+                        <Button
+                          layout="link"
+                          size="icon"
+                          aria-label="Delete"
+                          onClick={() => handleShowModal(user)}
+                        >
+                          <LockIcon
+                            className="w-5 h-5 text-red-800"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TableFooter>
+            <Pagination
+              totalResults={totalResults}
+              resultsPerPage={resultsPerPage}
+              onChange={onPageChangeTable2}
+              label="Table navigation"
+            />
+          </TableFooter>
+        </TableContainer>
+      )}
       <Modals
         isOpenModal={isOpenModal}
         setClose={() => setOpenModal(false)}
