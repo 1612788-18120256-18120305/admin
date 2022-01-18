@@ -35,7 +35,7 @@ function UsersPage(props) {
 
   useEffect(() => {
     props.fetchUsers();
-  }, [props]);
+  }, []);
 
   if (!props.users) {
     return <div>Loading...</div>;

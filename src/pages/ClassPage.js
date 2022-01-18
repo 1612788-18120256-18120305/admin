@@ -119,6 +119,7 @@ function ClassPage(props) {
                     <span className="text-sm">{c.description}</span>
                   </TableCell>
                   <TableCell>
+                    {console.log(c.name)}
                     <Badge type={c.status}>{c.owner.name}</Badge>
                   </TableCell>
                   <TableCell>

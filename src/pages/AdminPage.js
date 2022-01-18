@@ -30,7 +30,7 @@ function AdminPage(props) {
 
   useEffect(() => {
     props.fetchAdmins();
-  }, [props]);
+  }, []);
 
   let dataTable = props.admins;
   dataTable = dataTable.filter((admin) => {
